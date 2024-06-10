@@ -1,9 +1,18 @@
-// import Image from "next/image";
 
-export default function Home() {
+import Footer from "@/components/layout/Footer";
+import Header from "@/components/layout/Header";
+import HomePage from "@/pages/Home";
+import Link from "next/link";
+import { Fragment } from "react";
+import { FiSearch, FiHeart, FiShoppingCart } from 'react-icons/fi';
+import { HiFire } from 'react-icons/hi';
+
+export default async function Index() {
   return (
-    <div>
-      Hello World
-    </div>
+    <Fragment>
+      <Header />
+        <HomePage />
+      <Footer/>
+    </Fragment>
   );
 }

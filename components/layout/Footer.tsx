@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800 text-green py-4">
       <div className=" mx-auto flex text-center justify-between items-center">
-        <div className="copyright text-center ">
+        <div className="copyright text-center text-white">
           &copy; {new Date().getFullYear()} My App. All rights reserved.
         </div>
         <div className="social-links">
