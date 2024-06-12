@@ -1,4 +1,5 @@
-// src/components/HomePage.js
+"use client"
+import withAuth from '@/hoc/withAuth';
 import React from 'react';
 
 const HomePage = () => {
@@ -48,4 +49,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default withAuth(HomePage);
