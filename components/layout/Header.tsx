@@ -1,21 +1,20 @@
-import { createClient } from "@/utils/supabase/server";
+"use client"
+import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 
-export default async function Header() {
-  const supabase = createClient();
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  const signOut = async () => {
-    "use server";
-
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    return redirect("/login");
+export default function Header() {
+  const { signOut, user } = useAuth();
+  const router = useRouter()
+  
+  const handleLogout  = async () => {
+    try {
+      await signOut();
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
@@ -30,10 +29,10 @@ export default async function Header() {
               Home
             </Link>
             <Link
-              href="/categories"
+              href="/product"
               className="text-gray-700 hover:text-gray-900"
             >
-              Categories
+              Product
             </Link>
             <Link href="/contact" className="text-gray-700 hover:text-gray-900">
               Contact
@@ -53,8 +52,8 @@ export default async function Header() {
             <FiShoppingCart className="w-6 h-6 text-gray-700" />
             <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-blue-600 rounded-full"></span>
           </button>
-          {session ? (
-            <form action={signOut}>
+          {user ? (
+            <form action={handleLogout}>
               <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
                 Logout
               </button>
