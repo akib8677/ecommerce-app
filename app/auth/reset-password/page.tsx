@@ -1,8 +1,9 @@
 "use client"
 import React, { useState, FormEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import withAuth from '@/hoc/withAuth';
 
-export default function ResetPasswordForm() {
+ function ResetPasswordForm() {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -71,3 +72,5 @@ export default function ResetPasswordForm() {
     </div>
   );
 }
+
+export default withAuth(ResetPasswordForm);

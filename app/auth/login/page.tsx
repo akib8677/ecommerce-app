@@ -1,10 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import withAuth from "@/hoc/withAuth";
 
-export default function LoginPage() {
+function LoginPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,8 +18,8 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     try {
-     const data = await signIn(email, password);
-     console.log(data)
+      const data = await signIn(email, password);
+      console.log(data);
       router.push("/");
     } catch (error) {
       setError("An error occurred during sign-in. Please try again.");
@@ -79,3 +80,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default LoginPage;

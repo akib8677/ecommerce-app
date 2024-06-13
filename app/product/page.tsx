@@ -1,67 +1,32 @@
-'use client';
+"use client";
+import client from "@/lib/algolia";
+import { Hits, InstantSearch, SearchBox } from "react-instantsearch";
+import ProductDetail from "@/components/product";
 
-import { useQuery, gql } from '@apollo/client';
-
-// Define the types for the GraphQL data
-interface DemoNode {
-  name: string;
-  age: string; // Assuming age is returned as a string
-}
-
-interface DemoEdge {
-  node: DemoNode;
-}
-
-interface DemoCollection {
-  edges: DemoEdge[];
-}
-
-interface DemoData {
-  demoCollection: DemoCollection;
-}
-
-// Define the GraphQL query
-const GET_DEMO_DATA = gql`
-  query GetDemoData {
-    demoCollection {
-      edges {
-        node {
-          name
-          age
-        }
-      }
-    }
-  }
-`;
-
-// Define the DemoComponent
-const DemoComponent = () => {
-  // Use the useQuery hook to fetch data
-  const { loading, error, data } = useQuery<DemoData>(GET_DEMO_DATA);
-
-  // Handle loading state
-  if (loading) return <p>Loading...</p>;
-
-  // Handle error state
-  if (error) return <p>Error: {error.message}</p>;
-
-  // Handle case where data is undefined or demoCollection is undefined
-  if (!data || !data.demoCollection) return <p>No data found</p>;
-
-  // Extract edges from the data
-  const { edges } = data.demoCollection;
-
+const Product: React.FC = () => {
   return (
-    <div>
-      <h1>Demo Data</h1>
-      {edges.map((edge, index) => (
-        <div key={index}>
-          <p>Name: {edge.node.name}</p>
-          <p>Age: {edge.node.age}</p>
+    <InstantSearch searchClient={client} indexName="product">
+      <div className="flex flex-col items-center mt-10">
+        <div className="w-full max-w-md">
+          <SearchBox
+            searchAsYouType
+            placeholder="Search for products..."
+            classNames={{
+              root: "flex items-center justify-center mb-4",
+              form: "w-full flex",
+              input:
+                "w-full px-4 py-2 rounded-l-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600",
+              submit:
+                "px-4 py-2 rounded-r-md bg-blue-500 text-white font-bold cursor-pointer",
+            }}
+          />
         </div>
-      ))}
-    </div>
+        <div className="container mx-auto py-6">
+            <Hits hitComponent={ProductDetail} />
+        </div>
+      </div>
+    </InstantSearch>
   );
 };
 
-export default DemoComponent;
+export default Product;

@@ -1,9 +1,11 @@
-"use client"
-import { useAuth } from '@/context/AuthContext';
-import React, { useState, FormEvent } from 'react';
+"use client";
+import { useAuth } from "@/context/AuthContext";
+import withAuth from "@/hoc/withAuth";
+import Link from "next/link";
+import React, { useState, FormEvent } from "react";
 
-export default function ForgotPasswordForm() {
-  const [email, setEmail] = useState<string>('');
+function ForgotPasswordForm() {
+  const [email, setEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -17,9 +19,9 @@ export default function ForgotPasswordForm() {
 
     try {
       await forgotPassword(email);
-      setMessage('Check your email for the password reset link.');
+      setMessage("Check your email for the password reset link.");
     } catch (error) {
-      setError('Error requesting password reset: ');
+      setError("Error requesting password reset:");
     }
 
     setLoading(false);
@@ -47,9 +49,17 @@ export default function ForgotPasswordForm() {
           disabled={loading}
           className="bg-green-700 w-full rounded-md px-4 py-2 text-foreground mb-2"
         >
-          {loading ? 'Submitting...' : 'Submit'}
+          {loading ? "Submitting..." : "Submit"}
         </button>
+        <div className="mt-4 text-center text-sm">
+          Have an account?{" "}
+          <Link href="/auth/login" className="text-blue-600 hover:underline">
+            Log In
+          </Link>
+        </div>
       </form>
     </div>
   );
 }
+
+export default ForgotPasswordForm
