@@ -3,8 +3,9 @@ import Link from "next/link";
 import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import withAuth from "@/hoc/withAuth";
 
-export default function SignupPage() {
+function SignupPage() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
@@ -12,7 +13,7 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { signUp } = useAuth();
-  const router = useRouter()
+  const router = useRouter();
 
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();
@@ -98,3 +99,5 @@ export default function SignupPage() {
     </div>
   );
 }
+
+export default SignupPage

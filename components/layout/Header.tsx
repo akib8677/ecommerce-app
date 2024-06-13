@@ -54,7 +54,7 @@ export default function Header() {
           </button>
           {user ? (
             <form action={handleLogout}>
-              <button className="py-2 px-4 rounded-md no-underline bg-btn-background hover:bg-btn-background-hover">
+              <button className="py-2 px-4 bg-red-500 text-white rounded-md">
                 Logout
               </button>
             </form>
