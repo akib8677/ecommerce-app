@@ -19,7 +19,6 @@ function LoginPage() {
     setError(null);
     try {
       const data = await signIn(email, password);
-      console.log(data);
       router.push("/");
     } catch (error) {
       setError("An error occurred during sign-in. Please try again.");

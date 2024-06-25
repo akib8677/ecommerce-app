@@ -1,12 +1,15 @@
 "use client"
 import { useAuth } from "@/context/AuthContext";
+import { CartContext } from "@/context/CartContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
 
 export default function Header() {
   const { signOut, user } = useAuth();
-  const router = useRouter()
+  const router = useRouter();
+  const { cart } = useContext(CartContext);
   
   const handleLogout  = async () => {
     try {
@@ -48,10 +51,10 @@ export default function Header() {
           <button className="relative p-2">
             <FiSearch className="w-6 h-6 text-gray-700" />
           </button>
-          <button className="relative p-2">
+          <Link href="/cart" className="relative p-2">
             <FiShoppingCart className="w-6 h-6 text-gray-700" />
-            <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-blue-600 rounded-full"></span>
-          </button>
+            <span className="absolute -top-1 right-0 inline-block w-2 h-2 rounded-full">{cart?.length}</span>
+          </Link>
           {user ? (
             <form action={handleLogout}>
               <button className="py-2 px-4 bg-red-500 text-white rounded-md">

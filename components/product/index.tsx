@@ -1,42 +1,82 @@
-import React from 'react';
+"use client";
 
-interface Product {
-  id: number;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-  rating: {
-    rate: number;
-    count: number;
+import ProductDetail from "@/components/product/ProductCard";
+import Filters from "@/components/product/Filter";
+import { fetchSearchResults } from "@/utils/algolia/fetchData";
+import { useState, useEffect, FormEvent } from "react";
+
+
+const Product: React.FC = () => {
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<any[]>([]);
+  const [initialResults, setInitialResults] = useState<any[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [minRating, setMinRating] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      const initialResults = await fetchSearchResults("");
+      setInitialResults(initialResults);
+      setResults(initialResults);
+    };
+
+    fetchInitialData();
+  }, [query]);
+
+  const handleSearch = async (e: FormEvent) => {
+    e.preventDefault();
+    const searchResults = await fetchSearchResults(query);
+    const filteredResults = applyFilters(searchResults);
+    setResults(filteredResults);
   };
-}
 
-interface ProductDetailProps {
-  hit: Product;
-}
+  const applyFilters = (products: any[]) => {
+    return products.filter(product =>
+      product.price >= priceRange[0] &&
+      product.price <= priceRange[1] &&
+      product.rating.rate >= minRating
+    );
+  };
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ hit }) => {
+  const handleFilterChange = () => {
+    const filteredResults = applyFilters(initialResults);
+    setResults(filteredResults);
+  };
+
+
   return (
-    <div className="grid grid-cols-4 gap-4">
-    <div className="max-w-xs rounded overflow-hidden shadow-lg">
-      <img className="w-full p-2" src={hit.image} alt={hit.title} />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{hit.title}</div>
-        <p className="text-gray-700 text-base overflow-hidden overflow-ellipsis line-clamp-3">
-          {hit.description}
-        </p>
-        <p className="text-gray-900 text-lg font-bold mt-2">${hit.price}</p>
-        <div className="flex items-center mt-2">
-          <div className="text-gray-700 text-sm">
-            {hit.rating.rate} ({hit.rating.count} reviews)
-          </div>
+    <div className="flex">
+      <Filters
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        minRating={minRating}
+        setMinRating={setMinRating}
+        applyFilters={handleFilterChange}
+      />
+      <div className="flex-1 p-6">
+        <form onSubmit={handleSearch} className="flex items-center space-x-4 p-4 mx-auto max-w-md">
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search..."
+            className="w-70 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Search
+          </button>
+        </form>
+        <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {results.map((product) => (
+            <ProductDetail key={product.id} product={product} />
+          ))}
         </div>
       </div>
-    </div>
     </div>
   );
 };
 
-export default ProductDetail;
+export default Product;
