@@ -1,6 +1,3 @@
-"use client"
-import withAuth from '@/hoc/withAuth';
-import React from 'react';
 
 const HomePage = () => {
   return (
@@ -49,4 +46,4 @@ const HomePage = () => {
   );
 };
 
-export default withAuth(HomePage);
+export default HomePage;

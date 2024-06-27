@@ -13,8 +13,11 @@ const Filters: React.FC<FiltersProps> = ({
 }) => {
   return (
     <div className="w-64 p-4 border-r border-gray-200">
+      <div className="border-b pt-4 pb-4 text-xl font-medium">
+        Filter
+      </div>
       <div className="mb-6">
-        <label className="block text-gray-700 mb-2">Price Range:</label>
+        <label className="block text-gray-700 mb-2 mt-2">Price Range:</label>
         <input
           type="range"
           min="0"

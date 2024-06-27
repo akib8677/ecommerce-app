@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import withAuth from "@/hoc/withAuth";
+import { supabase } from "@/services/supabaseClient";
 
 function LoginPage() {
   const [email, setEmail] = useState<string>("");
@@ -12,6 +13,20 @@ function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error.message);
+        return;
+      }
+      if (data.session) {
+        router.replace('/');
+      }
+    };
+    checkUser();
+  }, []);
 
   const handleSignIn = async (e: FormEvent) => {
     e.preventDefault();

@@ -15,8 +15,6 @@ const withAuth = <P extends {}>(WrappedComponent: React.ComponentType<P>) => {
         // Redirect to login page if user is not authenticated
         if (!session.session?.user) {
           router.push("/auth/login");
-        }else {
-          router.push("/");
         }
 
       };

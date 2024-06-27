@@ -1,6 +1,6 @@
-import { CartContext } from "@/context/CartContext";
 import Link from "next/link";
-import { Fragment, useContext } from "react";
+import { useContext } from "react";
+import { CartContext } from "@/context/CartContext";
 
 type Product = {
   objectID: string;
@@ -20,12 +20,6 @@ type ProductDetailProps = {
 };
 
 const ProductCard: React.FC<ProductDetailProps> = ({ product }) => {
-  const { addToCart } = useContext(CartContext);
-
-  const handleAddToCart = () => {
-    addToCart(product);
-  };
-
   return (
     <div className="max-w-xs mx-auto rounded overflow-hidden shadow-lg flex flex-col items-center p-2">
       <Link href={`/product/${product.objectID}`}>
@@ -53,12 +47,6 @@ const ProductCard: React.FC<ProductDetailProps> = ({ product }) => {
           </div>
         </div>
       </Link>
-      <button
-        className="bg-blue-600 text-white rounded-full px-6 py-2 mt-4 hover:bg-blue-700"
-        onClick={handleAddToCart}
-      >
-        ADD TO CART
-      </button>
     </div>
   );
 };
