@@ -1,9 +1,10 @@
 "use client";
 import Link from "next/link";
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import withAuth from "@/hoc/withAuth";
+import { supabase } from "@/services/supabaseClient";
 
 function SignupPage() {
   const [email, setEmail] = useState<string>("");
@@ -14,6 +15,20 @@ function SignupPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { signUp } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error.message);
+        return;
+      }
+      if (data.session) {
+        router.replace('/');
+      }
+    };
+    checkUser();
+  }, []);
 
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault();

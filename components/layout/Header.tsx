@@ -1,17 +1,20 @@
-"use client"
+"use client";
 import { useAuth } from "@/context/AuthContext";
 import { CartContext } from "@/context/CartContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { FiSearch, FiShoppingCart } from "react-icons/fi";
+import { FaUserCircle } from "react-icons/fa";
+import UserModal from "../common/model/UserModal";
 
-export default function Header() {
+const Header: React.FC = () => {
   const { signOut, user } = useAuth();
   const router = useRouter();
   const { cart } = useContext(CartContext);
-  
-  const handleLogout  = async () => {
+  const [isModalOpen, setModalOpen] = useState<boolean>(false);
+
+  const handleLogout = async () => {
     try {
       await signOut();
       router.push('/auth/login');
@@ -19,6 +22,9 @@ export default function Header() {
       console.error('Error signing out:', error);
     }
   };
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
 
   return (
     <header className="bg-white shadow-md py-4">
@@ -53,14 +59,13 @@ export default function Header() {
           </button>
           <Link href="/cart" className="relative p-2">
             <FiShoppingCart className="w-6 h-6 text-gray-700" />
-            <span className="absolute -top-1 right-0 inline-block w-2 h-2 rounded-full">{cart?.length}</span>
+            <span className="absolute px-2 py-1 text-sm bg-red-400 text-white rounded-full -top-2 -right-3">{cart?.length}</span>
           </Link>
           {user ? (
-            <form action={handleLogout}>
-              <button className="py-2 px-4 bg-red-500 text-white rounded-md">
-                Logout
-              </button>
-            </form>
+            <div className="relative">
+              <FaUserCircle size={32} className="text-gray-600 cursor-pointer" onClick={openModal} />
+              <UserModal isOpen={isModalOpen} closeModal={closeModal} userEmail={user.email || 'N/A'} logout={handleLogout} />
+            </div>
           ) : (
             <Link
               href="/auth/login"
@@ -73,4 +78,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;

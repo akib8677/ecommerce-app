@@ -12,11 +12,13 @@ export interface Product {
   
   export interface CartItem extends Product {
     quantity: number;
+    objectID: string;
   }
   
   export interface CartContextType {
-    cart: CartItem[];
+    cart: any[];
     addToCart: (product: Product) => void;
+    removeFromCart: (objectID : string) => void;
     loading:boolean
     error:  string | null;
     setCart: (product: any) => void;

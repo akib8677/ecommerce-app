@@ -1,7 +1,9 @@
 "use client"
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import withAuth from '@/hoc/withAuth';
+import { supabase } from '@/services/supabaseClient';
+import { useRouter } from 'next/navigation';
 
  function ResetPasswordForm() {
   const [password, setPassword] = useState<string>('');
@@ -10,6 +12,21 @@ import withAuth from '@/hoc/withAuth';
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const { updatePassword } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error.message);
+        return;
+      }
+      if (data.session) {
+        router.replace('/');
+      }
+    };
+    checkUser();
+  }, []);
 
   const handleResetPassword = async (e: FormEvent) => {
     e.preventDefault();

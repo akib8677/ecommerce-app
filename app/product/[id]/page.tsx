@@ -1,3 +1,4 @@
+import AddToCartButton from "@/components/common/button/AddToCartButton";
 import { fetchProductById } from "@/utils/algolia/fetchData";
 import { notFound } from "next/navigation";
 
@@ -36,7 +37,7 @@ const ProductDetailPage = async ({ params }: ProductDetailProps) => {
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
             {product.title}
           </h1>
-          <p className="text-2xl text-red-500 font-bold mt-2 mb-4">
+          <p className="text-2xl text-gray-800 font-bold mt-2 mb-4">
             ${product.price}{" "}
             {product.originalPrice && (
               <span className="line-through text-gray-500">
@@ -79,9 +80,9 @@ const ProductDetailPage = async ({ params }: ProductDetailProps) => {
                 Long
               </button>
             </div>
-            <button className="bg-blue-600 text-white rounded-full px-6 py-2 mt-4 hover:bg-blue-700">
-              ADD TO CART
-            </button>
+            <div className="w-full">
+              <AddToCartButton product={product} />
+            </div>
           </div>
         </div>
       </div>

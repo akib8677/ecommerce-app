@@ -12,11 +12,5 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <CartProvider>
-      <Header />
-        {children}
-      <Footer />
-    </CartProvider>
-  );
+  return <CartProvider>{children}</CartProvider>;
 }

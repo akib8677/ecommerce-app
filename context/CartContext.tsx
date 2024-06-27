@@ -1,6 +1,6 @@
 "use client"
 import { CartContextType, CartItem, Product } from '@/types';
-import { addProductTOCart, fetchCartItems } from '@/utils/algolia';
+import { addProductTOCart, fetchCartItems, removeProductToCart } from '@/utils/algolia';
 import React, { ReactNode, createContext, useEffect, useState } from 'react';
 
 const initialCart: CartItem[] = [];
@@ -12,6 +12,7 @@ interface CartProviderProps {
 export const CartContext = createContext<CartContextType>({
   cart: initialCart,
   addToCart: () => {},
+  removeFromCart: () => {},
   loading: false,
   error: null,
   setCart: () => {}
@@ -48,8 +49,19 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     });
   };
 
+  const removeFromCart = async (objectID: string) => {
+    debugger
+    try {
+      const updatedCart = cart.filter((item:any) => item.objectID !== objectID);
+      setCart(updatedCart);
+      await removeProductToCart(objectID);
+    } catch (error) {
+      console.error('Failed to remove product from Algolia:', error);
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart, loading, error }}>
+    <CartContext.Provider value={{ cart, setCart, addToCart, removeFromCart, loading, error }}>
       {children}
     </CartContext.Provider>
   );

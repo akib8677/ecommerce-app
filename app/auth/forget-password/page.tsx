@@ -1,8 +1,10 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
 import withAuth from "@/hoc/withAuth";
+import { supabase } from "@/services/supabaseClient";
 import Link from "next/link";
-import React, { useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import React, { useState, FormEvent, useEffect } from "react";
 
 function ForgotPasswordForm() {
   const [email, setEmail] = useState<string>("");
@@ -10,6 +12,21 @@ function ForgotPasswordForm() {
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { forgotPassword } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error.message);
+        return;
+      }
+      if (data.session) {
+        router.replace('/');
+      }
+    };
+    checkUser();
+  }, []);
 
   const handlePasswordReset = async (e: FormEvent) => {
     e.preventDefault();

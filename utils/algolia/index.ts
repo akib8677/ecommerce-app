@@ -2,6 +2,7 @@ import { client } from "@/lib/algolia";
 const index = client.initIndex("cart");
 
 export async function addProductTOCart(data: any) {
+  debugger
   try {
     await index.saveObject(data);
   } catch (error) {
